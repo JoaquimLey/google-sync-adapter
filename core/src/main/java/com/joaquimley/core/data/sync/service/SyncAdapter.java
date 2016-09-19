@@ -24,24 +24,26 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.DriveFile;
-import com.joaquimley.core.data.sync.SyncHelper;
+import com.google.android.gms.drive.Drive;
 
 /**
  * Handle the transfer of data between a server and an
  * app, using the Android sync adapter framework.
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleApiClient.OnConnectionFailedListener {
+public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks {
+
     private String TAG = "SyncAdapter";
 
-    private GoogleApiClient mGoogleApiClient;
     // Global variables
     // Define a variable to contain a content resolver instance
     ContentResolver mContentResolver;
+    private GoogleApiClient mGoogleApiClient;
 
     /**
      * Set up the sync adapter
@@ -53,8 +55,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleAp
          * from the incoming Context
          */
         mContentResolver = context.getContentResolver();
-        mGoogleApiClient = SyncHelper.initGoogleApiClient(context, this);
-        mGoogleApiClient.connect();
+//        mGoogleApiClient = SyncHelper.initGoogleApiClient(context, this);
+//        mGoogleApiClient.connect();
     }
 
     /**
@@ -69,20 +71,46 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleAp
          * from the incoming Context
          */
         mContentResolver = context.getContentResolver();
-        mGoogleApiClient = SyncHelper.initGoogleApiClient(context, this);
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
-        DriveFile file = ;
-        file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
-                .setResultCallback(this);
+        if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()) {
+            initGoogleApiClient(getContext(), account.name);
+            Log.e(TAG, "new googleapiclient");
+            mGoogleApiClient.connect();
+        }
         Log.e(TAG, "on perform sync");
+    }
+
+
+    public void initGoogleApiClient(Context context, String accountName) {
+        mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .addApi(Drive.API)
+                .addScope(Drive.SCOPE_FILE)
+                .setAccountName(accountName).addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.e("synchelper", "onConnected()");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e("synchelper", "onConnectionSuspended()");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.w("SyncAdapter", "Could not connect to account: " + connectionResult.getErrorMessage());
+        Log.i(TAG, "GoogleApiClient connection failed: " + connectionResult.toString());
+        if (connectionResult.hasResolution()) {
+            getContext().startActivity(GoogleSignInResolutionActivity.newStartIntent(getContext(), connectionResult));
+        } else {
+            Log.e(TAG, "onConnectionFAiled() no resolution");
+        }
     }
 }

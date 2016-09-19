@@ -32,23 +32,25 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
+        <activity android:name=".data.sync.service.GoogleSignInResolutionActivity" />
 
         <service
             android:name=".data.sync.service.SyncService"
             android:exported="true"
             android:process=":sync">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
+            <meta-data
+                android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
 
         <provider
             android:name=".data.sync.service.SyncProvider"
             android:authorities="@string/sync_authority"
-            android:label="@string/app_name"
             android:exported="false"
+            android:label="@string/app_name"
             android:syncable="true" />
 
         <meta-data
