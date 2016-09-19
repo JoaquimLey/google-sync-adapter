@@ -23,16 +23,22 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.DriveFile;
+import com.joaquimley.core.data.sync.SyncHelper;
 
 /**
  * Handle the transfer of data between a server and an
  * app, using the Android sync adapter framework.
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter {
-
+public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleApiClient.OnConnectionFailedListener {
     private String TAG = "SyncAdapter";
 
+    private GoogleApiClient mGoogleApiClient;
     // Global variables
     // Define a variable to contain a content resolver instance
     ContentResolver mContentResolver;
@@ -47,6 +53,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
          * from the incoming Context
          */
         mContentResolver = context.getContentResolver();
+        mGoogleApiClient = SyncHelper.initGoogleApiClient(context, this);
+        mGoogleApiClient.connect();
     }
 
     /**
@@ -61,10 +69,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
          * from the incoming Context
          */
         mContentResolver = context.getContentResolver();
+        mGoogleApiClient = SyncHelper.initGoogleApiClient(context, this);
+        mGoogleApiClient.connect();
     }
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
+        DriveFile file = ;
+        file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
+                .setResultCallback(this);
         Log.e(TAG, "on perform sync");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.w("SyncAdapter", "Could not connect to account: " + connectionResult.getErrorMessage());
     }
 }

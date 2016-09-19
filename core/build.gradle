@@ -36,6 +36,9 @@ android {
 
 dependencies {
     def PLAY_SERVICES_AUTH_VERSION = '9.4.0'
+    def PLAY_SERVICES_SUPPORT_VERSION = '24.2.0'
 
+    compile "com.android.support:design:$PLAY_SERVICES_SUPPORT_VERSION"
     compile "com.google.android.gms:play-services-auth:$PLAY_SERVICES_AUTH_VERSION"
+    compile "com.google.android.gms:play-services-drive:$PLAY_SERVICES_AUTH_VERSION"
 }

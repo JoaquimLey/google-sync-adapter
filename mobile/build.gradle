@@ -36,8 +36,5 @@ android {
 }
 
 dependencies {
-    def PLAY_SERVICES_SUPPORT_VERSION = '24.2.0'
-
     compile project(':core')
-    compile "com.android.support:design:$PLAY_SERVICES_SUPPORT_VERSION"
 }

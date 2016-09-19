@@ -30,6 +30,8 @@ import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
 import android.util.Log;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
 import com.joaquimley.core.R;
 
 
@@ -144,5 +146,25 @@ public final class SyncHelper {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = connectivity.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public static GoogleApiClient initGoogleApiClient(Context context, GoogleApiClient.OnConnectionFailedListener onConnectionFailedListener) {
+        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
+                .addApi(Drive.API)
+                .addScope(Drive.SCOPE_FILE)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        // Do nothing
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+
+                    }
+                })
+                .addOnConnectionFailedListener(onConnectionFailedListener)
+                .build();
+        return googleApiClient;
     }
 }
