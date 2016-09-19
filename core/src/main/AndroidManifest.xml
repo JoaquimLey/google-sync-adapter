@@ -32,7 +32,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <activity android:name=".data.sync.service.GoogleSignInResolutionActivity" />
+        <activity android:name=".data.sync.service.SignInResolutionActivity" />
 
         <service
             android:name=".data.sync.service.SyncService"

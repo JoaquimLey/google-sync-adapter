@@ -28,21 +28,19 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.joaquimley.core.data.sync.SyncHelper;
 
 /**
- * Created by joaquimley on 19/09/16.
+ * {@link AppCompatActivity} used to request permission for Google Drive account
+ * to be called from the SyncAdapter only.
  */
-public class GoogleSignInResolutionActivity extends AppCompatActivity {
+public class SignInResolutionActivity extends AppCompatActivity {
 
-    public static final String TAG = "GoogleResolution";
-    public static final String EXTRA_CONNECTION_RESULT = "extraConnectionResult";
-    public static final String EXTRA_ACCOUNT_NAME = "extraAccountName";
+    private static final String TAG = "GoogleResolution";
+    private static final String EXTRA_CONNECTION_RESULT = "extraConnectionResult";
     private static final int REQUEST_CODE_RESOLUTION = 9001;
 
-    private String mAccountName;
     private ConnectionResult mConnectionResult;
 
     public static Intent newStartIntent(Context context, ConnectionResult result) {
-        Intent startIntent = new Intent(context, GoogleSignInResolutionActivity.class);
-//        googleSignInResolutionIntent.putExtra(EXTRA_ACCOUNT_NAME, accountName);
+        Intent startIntent = new Intent(context, SignInResolutionActivity.class);
         startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startIntent.putExtra(EXTRA_CONNECTION_RESULT, result);
         return startIntent;
@@ -52,7 +50,6 @@ public class GoogleSignInResolutionActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            mAccountName = getIntent().getStringExtra(EXTRA_ACCOUNT_NAME);
             mConnectionResult = (ConnectionResult) getIntent().getExtras().get(EXTRA_CONNECTION_RESULT);
         }
         Log.e(TAG, "connectionREsult null " + (mConnectionResult == null));

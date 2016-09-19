@@ -26,10 +26,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.Metadata;
+import com.joaquimley.core.ui.AsyncTaskCallbacks;
+import com.joaquimley.core.ui.CreateFileAsyncTask;
 
 /**
  * Handle the transfer of data between a server and an
@@ -55,8 +59,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleAp
          * from the incoming Context
          */
         mContentResolver = context.getContentResolver();
-//        mGoogleApiClient = SyncHelper.initGoogleApiClient(context, this);
-//        mGoogleApiClient.connect();
     }
 
     /**
@@ -71,7 +73,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleAp
          * from the incoming Context
          */
         mContentResolver = context.getContentResolver();
-        mGoogleApiClient.connect();
     }
 
     @Override
@@ -81,6 +82,23 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleAp
             Log.e(TAG, "new googleapiclient");
             mGoogleApiClient.connect();
         }
+        new CreateFileAsyncTask(getContext(), "ThisIsTheGoogleSyncAdapterProff", new AsyncTaskCallbacks() {
+            @Override
+            public void onTaskStarted() {
+                Log.e("adapter", "onTaskStarted");
+            }
+
+            @Override
+            public void onTaskInProgress() {
+                Log.e("adapter", "onTaskInProgress");
+            }
+
+            @Override
+            public void onPostExecute(Metadata result) {
+                Log.e("adapter", "onPostExecute " + result.getTitle());
+                Toast.makeText(getContext(), "Uploaded!: " + result.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        }).execute();
         Log.e(TAG, "on perform sync");
     }
 
@@ -108,7 +126,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleAp
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i(TAG, "GoogleApiClient connection failed: " + connectionResult.toString());
         if (connectionResult.hasResolution()) {
-            getContext().startActivity(GoogleSignInResolutionActivity.newStartIntent(getContext(), connectionResult));
+            getContext().startActivity(SignInResolutionActivity.newStartIntent(getContext(), connectionResult));
         } else {
             Log.e(TAG, "onConnectionFAiled() no resolution");
         }
