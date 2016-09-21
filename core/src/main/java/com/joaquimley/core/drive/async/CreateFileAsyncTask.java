@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.joaquimley.core.ui;
+package com.joaquimley.core.drive.async;
 
 import android.content.Context;
 import android.util.Log;
@@ -38,7 +38,7 @@ import java.io.OutputStream;
  */
 public class CreateFileAsyncTask extends ApiClientAsyncTask<Void, Void, Metadata> {
 
-    public static final String MIME_TYPE = "text/plain";
+    private static final String MIME_TYPE = "text/plain";
 
     private final String mFileName;
     private final AsyncTaskCallbacks mListener;

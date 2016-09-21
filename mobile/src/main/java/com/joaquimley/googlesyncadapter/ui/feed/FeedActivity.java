@@ -24,16 +24,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.joaquimley.core.data.sync.SyncHelper;
+import com.joaquimley.core.sync.SyncHelper;
 import com.joaquimley.googlesyncadapter.R;
-import com.joaquimley.googlesyncadapter.ui.base.BaseActivity;
 
-public class FeedActivity extends BaseActivity {
+public class FeedActivity extends AppCompatActivity {
 
-    private static final int RCQ_GET_ACCOUNTS = 1337;
     private static String EXTRA_USER_NAME = "extraUserName";
+    private static final int RCQ_GET_ACCOUNTS = 1337;
 
     public static Intent newStartIntent(Context context, String userName) {
         Intent startIntent = new Intent(context, FeedActivity.class);
@@ -46,16 +48,20 @@ public class FeedActivity extends BaseActivity {
         setTheme(R.style.AppTheme); // Branded launch
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+
         if (checkForGoogleAccountPermission()) {
-            // Initialize sync adapter
             SyncHelper.initializeSync(this);
         }
+
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.feed_container, FeedFragment.newInstance(true))
+                    .add(R.id.feed_container, FeedFragment.newInstance())
                     .commit();
         }
+
+        Toast.makeText(getApplicationContext(), "Hello " + getIntent().getExtras()
+                .getString(EXTRA_USER_NAME), Toast.LENGTH_SHORT).show();
     }
 
     private boolean checkForGoogleAccountPermission() {
@@ -76,9 +82,8 @@ public class FeedActivity extends BaseActivity {
                     // permission was granted, yay! Do the
                     SyncHelper.initializeSync(this);
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    // TODO: 13/09/16 Inform the user no background sync will happen
+                    Toast.makeText(getApplicationContext(), "Can't sync without permission",
+                            Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -90,5 +95,14 @@ public class FeedActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_feed, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            supportFinishAfterTransition();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

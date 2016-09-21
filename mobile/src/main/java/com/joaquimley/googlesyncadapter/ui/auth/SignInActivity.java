@@ -32,7 +32,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.joaquimley.googlesyncadapter.R;
 import com.joaquimley.googlesyncadapter.ui.feed.FeedActivity;
 
@@ -106,15 +105,12 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
+            // Signed in successfully.
             GoogleSignInAccount acct = result.getSignInAccount();
             if (acct != null) {
                 startActivity(FeedActivity.newStartIntent(this, acct.getDisplayName()));
                 finish();
             }
-        } else {
-            // Signed out, show unauthenticated UI.
-            // TODO: 13/09/16 Handle this
         }
     }
 
@@ -123,41 +119,13 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        updateUI(false);
-                    }
-                });
-    }
-
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        updateUI(false);
-                    }
-                });
-    }
-
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
-    private void updateUI(boolean signedIn) {
-//        if (signedIn) {
-//            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-//        } else {
-//            mStatusTextView.setText(R.string.signed_out);
-//            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-//        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -165,12 +133,6 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             case R.id.sign_in_button:
                 signIn();
                 break;
-//            case R.id.sign_out_button:
-//                signOut();
-//                break;
-//            case R.id.disconnect_button:
-//                revokeAccess();
-//                break;
         }
     }
 }

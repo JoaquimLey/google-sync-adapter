@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.joaquimley.core.ui;
+package com.joaquimley.core.drive.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -85,7 +85,7 @@ public abstract class ApiClientAsyncTask<Params, Progress, Result>
     protected abstract Result doInBackgroundConnected(Params... params);
 
     /**
-     * Gets the GoogleApliClient owned by this async task.
+     * Gets the GoogleApiClient owned by this async task.
      */
     protected GoogleApiClient getGoogleApiClient() {
         return mClient;

@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-package com.joaquimley.core.data.network;
+package com.joaquimley.core.drive.async;
 
-/**
- * Created by joaquimley on 12/09/16.
- */
-public class DataManger {
+import com.google.android.gms.drive.Metadata;
+
+public interface AsyncTaskCallbacks {
+
+    void onTaskStarted();
+
+    void onTaskInProgress();
+
+    void onPostExecute(Metadata result);
+
 }

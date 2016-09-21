@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.joaquimley.core.data.sync;
+package com.joaquimley.core.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -32,12 +32,11 @@ import android.util.Log;
 
 import com.joaquimley.core.R;
 
-
 public final class SyncHelper {
 
     private static final String TAG = "SyncHelper";
-    // Interval at which to sync, in seconds.
-    private static final int SYNC_INTERVAL = (int) (DateUtils.WEEK_IN_MILLIS / 1000);
+
+    private static final int SYNC_INTERVAL = (int) (DateUtils.DAY_IN_MILLIS / 1000); // Once per day
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private static final int SYNCABLE_TRUE = 1;
 
@@ -61,8 +60,7 @@ public final class SyncHelper {
      * @param context The application context
      */
     private static Account getSyncAccount(Context context) {
-        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.GET_ACCOUNTS)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
             Log.e(TAG, "We do not have accounts permission, canceling sync");
             return null;
         }
@@ -91,13 +89,13 @@ public final class SyncHelper {
         /*
          * Finally, let's do a sync to get things started
          */
-        syncImmediately(context);
+        syncNow(context);
     }
 
     /**
      * Helper method to schedule the sync adapter periodic execution
      */
-    public static void configurePeriodicSync(Context context, Account account) {
+    private static void configurePeriodicSync(Context context, Account account) {
         final String authority = context.getString(R.string.sync_authority);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // We can enable inexact timers in our periodic sync
@@ -116,7 +114,7 @@ public final class SyncHelper {
      *
      * @param context The context used to access the account service
      */
-    public static void syncImmediately(Context context) {
+    public static void syncNow(Context context) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
@@ -129,7 +127,7 @@ public final class SyncHelper {
      * @param context The context used to access the account service
      * @param extras  The Bundle of extra values
      */
-    public static void syncImmediately(Context context, Bundle extras) {
+    public static void syncNow(Context context, Bundle extras) {
         Bundle bundle = new Bundle(extras);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);

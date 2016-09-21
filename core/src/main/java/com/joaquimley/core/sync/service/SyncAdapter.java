@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.joaquimley.core.data.sync.service;
+package com.joaquimley.core.sync.service;
 
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
@@ -26,14 +26,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.Metadata;
-import com.joaquimley.core.ui.AsyncTaskCallbacks;
-import com.joaquimley.core.ui.CreateFileAsyncTask;
+import com.joaquimley.core.drive.CreateFileTask;
+import com.joaquimley.core.drive.DriveTaskCallback;
+import com.joaquimley.core.sync.view.SignInResolutionActivity;
 
 /**
  * Handle the transfer of data between a server and an
@@ -46,7 +45,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleAp
 
     // Global variables
     // Define a variable to contain a content resolver instance
-    ContentResolver mContentResolver;
+    private ContentResolver mContentResolver;
     private GoogleApiClient mGoogleApiClient;
 
     /**
@@ -79,31 +78,35 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleAp
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()) {
             initGoogleApiClient(getContext(), account.name);
-            Log.e(TAG, "new googleapiclient");
             mGoogleApiClient.connect();
         }
-        new CreateFileAsyncTask(getContext(), "ThisIsTheGoogleSyncAdapterProff", new AsyncTaskCallbacks() {
+
+        new CreateFileTask("This Callbacks FileTask", "Hello world baby " + System.currentTimeMillis(), mGoogleApiClient, new DriveTaskCallback() {
             @Override
             public void onTaskStarted() {
-                Log.e("adapter", "onTaskStarted");
+                Log.e(TAG, "DriveTaskCallback onTaskStarted");
             }
 
             @Override
             public void onTaskInProgress() {
-                Log.e("adapter", "onTaskInProgress");
+                Log.e(TAG, "DriveTaskCallback onTaskInProgress");
             }
 
             @Override
-            public void onPostExecute(Metadata result) {
-                Log.e("adapter", "onPostExecute " + result.getTitle());
-                Toast.makeText(getContext(), "Uploaded!: " + result.getTitle(), Toast.LENGTH_SHORT).show();
+            public void onTaskSuccess(String returnText) {
+                Log.e(TAG, "DriveTaskCallback onTaskSuccess " + returnText);
             }
-        }).execute();
+
+            @Override
+            public void onTaskError(String errorMessage) {
+                Log.e(TAG, "DriveTaskCallback onTaskError " + errorMessage);
+            }
+        });
         Log.e(TAG, "on perform sync");
     }
 
 
-    public void initGoogleApiClient(Context context, String accountName) {
+    private void initGoogleApiClient(Context context, String accountName) {
         mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(Drive.API)
                 .addScope(Drive.SCOPE_FILE)
@@ -114,12 +117,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GoogleAp
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.e("synchelper", "onConnected()");
+        Log.e(TAG, "onConnected()");
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.e("synchelper", "onConnectionSuspended()");
+        Log.e(TAG, "onConnectionSuspended() " + i);
     }
 
     @Override

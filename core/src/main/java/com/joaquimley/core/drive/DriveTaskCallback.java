@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package com.joaquimley.googlesyncadapter.ui.base;
+package com.joaquimley.core.drive;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
+public interface DriveTaskCallback {
 
-public class BaseActivity extends AppCompatActivity {
+    void onTaskStarted();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    void onTaskInProgress();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            supportFinishAfterTransition();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    void onTaskSuccess(String returnText);
+
+    void onTaskError(String errorMessage);
+
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.joaquimley.core.data.sync.service;
+package com.joaquimley.core.sync.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.joaquimley.core.data.sync.SyncHelper;
+import com.joaquimley.core.sync.SyncHelper;
 
 /**
  * {@link AppCompatActivity} used to request permission for Google Drive account
@@ -35,7 +35,7 @@ public class SignInResolutionActivity extends AppCompatActivity {
 
     private static final String TAG = "GoogleResolution";
     private static final String EXTRA_CONNECTION_RESULT = "extraConnectionResult";
-    private static final int REQUEST_CODE_RESOLUTION = 9001;
+    private static final int RC_RESOLUTION = 9001;
 
     private ConnectionResult mConnectionResult;
 
@@ -52,14 +52,13 @@ public class SignInResolutionActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             mConnectionResult = (ConnectionResult) getIntent().getExtras().get(EXTRA_CONNECTION_RESULT);
         }
-        Log.e(TAG, "connectionREsult null " + (mConnectionResult == null));
         showResolutionDialog(mConnectionResult);
     }
 
     private void showResolutionDialog(ConnectionResult result) {
         GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
         try {
-            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
+            result.startResolutionForResult(this, RC_RESOLUTION);
         } catch (IntentSender.SendIntentException e) {
             Log.e(TAG, "Exception while starting resolution activity", e);
 
@@ -72,8 +71,8 @@ public class SignInResolutionActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
-            Log.e(TAG, "Resolution OK");
+        if (requestCode == RC_RESOLUTION && resultCode == RESULT_OK) {
+            Log.d(TAG, "Resolution OK");
             SyncHelper.initializeSync(getApplicationContext());
             finish();
         }

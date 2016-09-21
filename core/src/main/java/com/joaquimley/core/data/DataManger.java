@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package com.joaquimley.core.ui;
+package com.joaquimley.core.data;
 
-import com.google.android.gms.drive.Metadata;
+public class DataManger {
 
-public interface AsyncTaskCallbacks {
-
-    void onTaskStarted();
-
-    void onTaskInProgress();
-
-    void onPostExecute(Metadata result);
+    /**
+     * Stub data manager, this is not required, just here for MVP bootstrap.
+     * See my Avenging project as an example: https://github.com/JoaquimLey/avenging
+     */
 
 }

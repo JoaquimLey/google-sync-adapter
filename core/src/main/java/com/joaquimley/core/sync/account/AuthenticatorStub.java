@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.joaquimley.core.data.sync.account;
+package com.joaquimley.core.sync.account;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;

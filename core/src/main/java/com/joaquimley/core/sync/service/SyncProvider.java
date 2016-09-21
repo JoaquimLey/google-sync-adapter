@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.joaquimley.core.data.sync.service;
+package com.joaquimley.core.sync.service;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

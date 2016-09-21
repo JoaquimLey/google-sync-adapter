@@ -17,13 +17,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
     publishNonDefault true
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 24
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
     }
 
     buildTypes {
@@ -35,10 +35,7 @@ android {
 }
 
 dependencies {
-    def PLAY_SERVICES_AUTH_VERSION = '9.4.0'
-    def PLAY_SERVICES_SUPPORT_VERSION = '24.2.0'
-
-    compile "com.android.support:design:$PLAY_SERVICES_SUPPORT_VERSION"
-    compile "com.google.android.gms:play-services-auth:$PLAY_SERVICES_AUTH_VERSION"
-    compile "com.google.android.gms:play-services-drive:$PLAY_SERVICES_AUTH_VERSION"
+    compile "com.android.support:design:$supportLibraryVersion"
+    compile "com.google.android.gms:play-services-auth:$playServicesVersion"
+    compile "com.google.android.gms:play-services-drive:$playServicesVersion"
 }

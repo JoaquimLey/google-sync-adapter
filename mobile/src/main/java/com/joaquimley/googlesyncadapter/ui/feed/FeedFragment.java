@@ -26,24 +26,17 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.joaquimley.core.data.sync.SyncHelper;
+import com.joaquimley.core.sync.SyncHelper;
 import com.joaquimley.googlesyncadapter.R;
 
 public class FeedFragment extends Fragment {
 
-    public static final String ARG_SOME = "argSome";
-
-    private boolean mSomeExampleArg;
-
     private AppCompatActivity mActivity;
-    private Toolbar mToolbar;
 
-    public static FeedFragment newInstance(boolean someArg) {
-
+    public static FeedFragment newInstance() {
         Bundle args = new Bundle();
-        args.putBoolean(ARG_SOME, someArg);
+//        args.putBoolean(ARG_SOME, someArg);
         FeedFragment fragment = new FeedFragment();
         fragment.setArguments(args);
         return fragment;
@@ -54,14 +47,7 @@ public class FeedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        if (getArguments() != null) {
-            mSomeExampleArg = getArguments().getBoolean(ARG_SOME);
-        }
-
-        Toast.makeText(getActivity().getApplicationContext(), "Passed demo arg: " + mSomeExampleArg,
-                Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,27 +57,29 @@ public class FeedFragment extends Fragment {
         return view;
     }
 
-
     private void initViews(View view) {
         mActivity = (AppCompatActivity) getActivity();
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mActivity.setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mActivity.setSupportActionBar(toolbar);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
             case R.id.action_refresh:
-                SyncHelper.syncImmediately(mActivity.getApplicationContext());
-                Snackbar.make(mActivity.findViewById(R.id.feed_layout), "Hello REFRESH", Snackbar.LENGTH_LONG).show();
+                SyncHelper.syncNow(mActivity.getApplicationContext());
+                Snackbar.make(mActivity.findViewById(R.id.fab), "Background syncing started",
+                        Snackbar.LENGTH_LONG).show();
                 return true;
 
             case R.id.action_settings:
-                Snackbar.make(mActivity.findViewById(R.id.feed_layout), "Hello Settings", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mActivity.findViewById(R.id.fab), "Show SettingsActivity",
+                        Snackbar.LENGTH_LONG).show();
                 return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }
