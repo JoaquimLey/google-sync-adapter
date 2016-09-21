@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ Copyright (c) Joaquim Ley 2016. All Rights Reserved.
   ~ <p/>
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="@string/sync_account_type"
-    android:icon="@mipmap/ic_launcher"
-    android:label="@string/sync_authenticator_label"
-    android:smallIcon="@mipmap/ic_launcher" />
+
+<resources>
+    <string name="app_name">Google SyncAdapter</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh</string>
+
+    <string name="signed_in_fmt">Signed in as %1$s</string>
+</resources>
