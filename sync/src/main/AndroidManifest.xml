@@ -29,6 +29,7 @@
     <application>
 
         <activity android:name=".view.SignInResolutionActivity" />
+        <activity android:name=".view.FolderPickerActivity" />
 
         <service
             android:name=".service.SyncService"

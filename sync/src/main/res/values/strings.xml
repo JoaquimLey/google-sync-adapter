@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="sync_authenticator_label">Google SyncAdapter</string>
+    <string name="sync_authenticator_label">GoogleSyncAdapter</string>
 
     <string name="sync_authority">com.joaquimley.googlesyncadapter.ui.feed.FeedActivity</string>
     <string name="sync_drive_scope">https://www.googleapis.com/auth/drive</string>

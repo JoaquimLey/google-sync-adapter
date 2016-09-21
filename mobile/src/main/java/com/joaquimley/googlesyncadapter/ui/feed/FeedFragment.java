@@ -16,19 +16,21 @@
 
 package com.joaquimley.googlesyncadapter.ui.feed;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.joaquimley.sync.SyncHelper;
 import com.joaquimley.googlesyncadapter.R;
+import com.joaquimley.sync.SyncHelper;
 
 public class FeedFragment extends Fragment {
 
@@ -68,7 +70,13 @@ public class FeedFragment extends Fragment {
         switch (item.getItemId()) {
 
             case R.id.action_refresh:
-                SyncHelper.syncNow(mActivity.getApplicationContext());
+
+                String folderId = mActivity.getSharedPreferences(SyncHelper.SYNC_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+                        .getString(SyncHelper.SYNC_DRIVE_FOLDER_ID, "");
+
+                Log.e("Fragment", "FOLDERID----->  " + folderId);
+                SyncHelper.uploadFileToDriveFolder(mActivity, folderId);
+
                 Snackbar.make(mActivity.findViewById(R.id.fab), "Background syncing started",
                         Snackbar.LENGTH_LONG).show();
                 return true;

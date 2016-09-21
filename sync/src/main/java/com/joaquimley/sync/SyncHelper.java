@@ -30,8 +30,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.joaquimley.sync.R;
-
 public final class SyncHelper {
 
     private static final String TAG = "SyncHelper";
@@ -39,6 +37,10 @@ public final class SyncHelper {
     private static final int SYNC_INTERVAL = (int) (DateUtils.DAY_IN_MILLIS / 1000); // Once per day
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private static final int SYNCABLE_TRUE = 1;
+
+    public static final String SYNC_SHARED_PREFERENCES_NAME = "googleSyncServiceSharedPreferencesName";
+    public static final String SYNC_IS_TO_UPLOAD_TO_FOLDER = "googleSyncServiceIsToUploadToFolder";
+    public static final String SYNC_DRIVE_FOLDER_ID = "googleSyncServiceFolderId";
 
     private SyncHelper() {
     }
@@ -99,9 +101,11 @@ public final class SyncHelper {
         final String authority = context.getString(R.string.sync_authority);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // We can enable inexact timers in our periodic sync
-            SyncRequest request = new SyncRequest.Builder().setExtras(Bundle.EMPTY).
-                    syncPeriodic(SYNC_INTERVAL, SYNC_FLEXTIME).
-                    setSyncAdapter(account, authority).build();
+            SyncRequest request = new SyncRequest.Builder()
+                    .setExtras(Bundle.EMPTY)
+                    .syncPeriodic(SYNC_INTERVAL, SYNC_FLEXTIME)
+                    .setSyncAdapter(account, authority)
+                    .build();
             ContentResolver.requestSync(request);
         } else {
             ContentResolver.addPeriodicSync(account, authority, Bundle.EMPTY, SYNC_INTERVAL);
@@ -131,6 +135,15 @@ public final class SyncHelper {
         Bundle bundle = new Bundle(extras);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        ContentResolver.requestSync(getSyncAccount(context), context.getString(R.string.sync_authority), bundle);
+    }
+
+    public static void uploadFileToDriveFolder(Context context, String driveFolderId) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(SYNC_IS_TO_UPLOAD_TO_FOLDER, true);
+        bundle.putString(SYNC_DRIVE_FOLDER_ID, driveFolderId);
         ContentResolver.requestSync(getSyncAccount(context), context.getString(R.string.sync_authority), bundle);
     }
 

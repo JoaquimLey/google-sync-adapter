@@ -61,7 +61,6 @@ public class SignInResolutionActivity extends AppCompatActivity {
             result.startResolutionForResult(this, RC_RESOLUTION);
         } catch (IntentSender.SendIntentException e) {
             Log.e(TAG, "Exception while starting resolution activity", e);
-
         }
     }
 
