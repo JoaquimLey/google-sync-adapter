@@ -27,7 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.joaquimley.core.sync.SyncHelper;
+import com.joaquimley.sync.SyncHelper;
 import com.joaquimley.googlesyncadapter.R;
 
 public class FeedFragment extends Fragment {

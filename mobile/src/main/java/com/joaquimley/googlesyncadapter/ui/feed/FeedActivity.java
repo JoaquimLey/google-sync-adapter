@@ -29,7 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.joaquimley.core.sync.SyncHelper;
+import com.joaquimley.sync.SyncHelper;
 import com.joaquimley.googlesyncadapter.R;
 
 public class FeedActivity extends AppCompatActivity {

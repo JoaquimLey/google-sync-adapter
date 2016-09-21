@@ -14,4 +14,16 @@
  * limitations under the License.
  */
 
-include ':mobile', ':sync'
+package com.joaquimley.sync.drive;
+
+public interface DriveTaskCallback {
+
+    void onTaskStarted();
+
+    void onTaskInProgress();
+
+    void onTaskSuccess(String returnText);
+
+    void onTaskError(String errorMessage);
+
+}

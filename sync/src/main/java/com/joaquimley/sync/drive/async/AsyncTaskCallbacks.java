@@ -14,4 +14,16 @@
  * limitations under the License.
  */
 
-include ':mobile', ':sync'
+package com.joaquimley.sync.drive.async;
+
+import com.google.android.gms.drive.Metadata;
+
+public interface AsyncTaskCallbacks {
+
+    void onTaskStarted();
+
+    void onTaskInProgress();
+
+    void onPostExecute(Metadata result);
+
+}

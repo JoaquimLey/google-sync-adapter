@@ -14,4 +14,27 @@
  * limitations under the License.
  */
 
-include ':mobile', ':sync'
+package com.joaquimley.googlesyncadapter;
+
+import android.app.Application;
+
+/**
+ * Created by joaquimley on 12/09/16.
+ */
+public class GoogleSyncAdapterApplication extends Application {
+
+    private static GoogleSyncAdapterApplication sInstance;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sInstance = this;
+    }
+
+    public GoogleSyncAdapterApplication getInstance() {
+        if (sInstance == null) {
+            sInstance = new GoogleSyncAdapterApplication();
+        }
+        return sInstance;
+    }
+}
