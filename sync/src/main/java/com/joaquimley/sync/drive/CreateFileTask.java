@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Creates a file to GoogleApiClient's Drive account
+ * Creates a file to GoogleApiClient's Drive Root folder (demo purpose only)
  */
 public class CreateFileTask {
 

@@ -16,6 +16,7 @@
 
 package com.joaquimley.sync.view;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -39,6 +40,8 @@ public class SignInResolutionActivity extends AppCompatActivity {
 
     private ConnectionResult mConnectionResult;
 
+    private Dialog mErrorDialog;
+
     public static Intent newStartIntent(Context context, ConnectionResult result) {
         Intent startIntent = new Intent(context, SignInResolutionActivity.class);
         startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -56,11 +59,12 @@ public class SignInResolutionActivity extends AppCompatActivity {
     }
 
     private void showResolutionDialog(ConnectionResult result) {
-        GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
+        mErrorDialog = GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0);
+        mErrorDialog.show();
         try {
             result.startResolutionForResult(this, RC_RESOLUTION);
         } catch (IntentSender.SendIntentException e) {
-            Log.e(TAG, "Exception while starting resolution activity", e);
+            Log.e(TAG, "Exception while starting resolution activity " + e);
         }
     }
 
@@ -73,8 +77,12 @@ public class SignInResolutionActivity extends AppCompatActivity {
         if (requestCode == RC_RESOLUTION && resultCode == RESULT_OK) {
             Log.d(TAG, "Resolution OK");
             SyncHelper.initializeSync(getApplicationContext());
-            finish();
         }
+
+        if (mErrorDialog.isShowing()) {
+            mErrorDialog.dismiss();
+        }
+        finish();
     }
 
 }

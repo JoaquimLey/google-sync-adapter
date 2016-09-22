@@ -13,13 +13,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<!--<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:accountType="@string/sync_account_type"--><!--android:allowParallelSyncs="false"--><!--android:contentAuthority="@string/sync_authority"--><!--android:isAlwaysSyncable="true"--><!--android:supportsUploading="true"--><!--android:userVisible="false" />-->
-
 
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-android:contentAuthority="@string/sync_authority"
-android:accountType="@string/sync_account_type"
-android:userVisible="true"
-android:supportsUploading="true"
-android:allowParallelSyncs="false"
-android:isAlwaysSyncable="true" />
+    android:accountType="@string/sync_account_type"
+    android:allowParallelSyncs="false"
+    android:contentAuthority="@string/sync_authority"
+    android:isAlwaysSyncable="true"
+    android:supportsUploading="true"
+    android:userVisible="true" />

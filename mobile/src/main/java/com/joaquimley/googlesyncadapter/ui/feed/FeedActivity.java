@@ -82,6 +82,7 @@ public class FeedActivity extends AppCompatActivity {
                     // permission was granted, yay! Do the
                     SyncHelper.initializeSync(this);
                 } else {
+
                     Toast.makeText(getApplicationContext(), "Can't sync without permission",
                             Toast.LENGTH_LONG).show();
                 }

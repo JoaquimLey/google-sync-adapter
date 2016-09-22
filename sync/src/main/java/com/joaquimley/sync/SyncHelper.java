@@ -37,6 +37,7 @@ public final class SyncHelper {
     private static final int SYNC_INTERVAL = (int) (DateUtils.DAY_IN_MILLIS / 1000); // Once per day
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private static final int SYNCABLE_TRUE = 1;
+    private static final int SYNCABLE_FALSE = 0;
 
     public static final String SYNC_SHARED_PREFERENCES_NAME = "googleSyncServiceSharedPreferencesName";
     public static final String SYNC_IS_TO_UPLOAD_TO_FOLDER = "googleSyncServiceIsToUploadToFolder";
@@ -111,6 +112,10 @@ public final class SyncHelper {
             ContentResolver.addPeriodicSync(account, authority, Bundle.EMPTY, SYNC_INTERVAL);
         }
         Log.v(TAG, "Periodic sync configured with " + SYNC_INTERVAL + " interval and " + SYNC_FLEXTIME + " flextime");
+    }
+
+    public static void cancelSyncService(Context context) {
+        ContentResolver.setIsSyncable(getSyncAccount(context), context.getString(R.string.sync_authority), SYNCABLE_FALSE);
     }
 
     /**
